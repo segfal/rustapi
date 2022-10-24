@@ -9,7 +9,8 @@ use std::sync::Mutex;
 
 
 
-struct user {
+struct user 
+{
     id: i32,
     name: String,
     email: String,
@@ -17,9 +18,11 @@ struct user {
 }
 
 
-impl user {
+impl user 
+{
     fn new(id: i32, name: String, email: String, password: String) -> user {
-        user {
+        user 
+        {
             id,
             name,
             email,
@@ -27,7 +30,8 @@ impl user {
         }
     }
 
-    fn add_to_db(&self, conn: &Connection) {
+    fn add_to_db(&self, conn: &Connection)
+    {
         conn.execute(
             "INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4)",
             &[&self.id, &self.name, &self.email, &self.password],
@@ -38,13 +42,16 @@ impl user {
 
 
 
-struct Dbase {
+struct Dbase 
+{
     conn: Connection,
 }
 
 
-impl Dbase {
-    fn new() -> Dbase {
+impl Dbase 
+{
+    fn new() -> Dbase 
+    {
         let conn = Connection::connect(
             "postgresql://postgres:postgres@localhost:5432/postgres",
             TlsMode::None,
@@ -53,7 +60,8 @@ impl Dbase {
         Dbase { conn }
     }
 
-    fn get_user(&self, id: i32) -> user {
+    fn get_user(&self, id: i32) -> user 
+    {
         let mut stmt = self.conn.prepare("SELECT * FROM users WHERE id = $1").unwrap();
         let user = stmt
             .query(&[&id])

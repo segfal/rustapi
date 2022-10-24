@@ -1,20 +1,10 @@
 #[macro_use] extern crate rocket;
+mod server;
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
-
-
-#[get("/user/<name>")]
-fn username(name : &str) -> String{
-    format!("Hello, {}",name)
-    
-}
 
 
 #[launch]
-fn rocket() -> _ {
-    rocket::build().mount("/", routes![index,username])
+fn rocket() -> _ 
+{
+    rocket::build().mount("/", routes![server::index,server::username])
 }
-
