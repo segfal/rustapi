@@ -35,3 +35,32 @@ impl user {
         .unwrap();
     }
 }
+
+
+
+struct Dbase {
+    conn: Connection,
+}
+
+
+impl Dbase {
+    fn new() -> Dbase {
+        let conn = Connection::connect(
+            "postgresql://postgres:postgres@localhost:5432/postgres",
+            TlsMode::None,
+        )
+        .unwrap();
+        Dbase { conn }
+    }
+
+    fn get_user(&self, id: i32) -> user {
+        let mut stmt = self.conn.prepare("SELECT * FROM users WHERE id = $1").unwrap();
+        let user = stmt
+            .query(&[&id])
+            .unwrap()
+            .iter()
+            .map(|row| user::new(row.get(0), row.get(1), row.get(2), row.get(3)))
+            .collect::<Vec<user>>();
+        user[0].clone()
+    }
+}
